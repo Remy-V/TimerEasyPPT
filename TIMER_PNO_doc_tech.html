@@ -1,0 +1,1083 @@
+﻿<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body><title>EasyPPT Timer — Documentation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root {
+    --paper:      #f2f5f8;
+    --surface:    #ffffff;
+    --surface-2:  #e8edf2;
+    --ink:        #161d27;
+    --ink-soft:   #3f4a57;
+    --muted:      #6a7683;
+    --line:       #d7dee6;
+    --accent:     #514ad0;
+    --accent-2:   #6f68e8;
+    --accent-soft:#ecebfb;
+    --ok:   #2f9557;
+    --warn: #b1720c;
+    --crit: #cc3a3a;
+    --disc: #1f76b6;
+    --stage:      #0c1016;
+    --stage-2:    #161d27;
+    --stage-ink:  #eef2f6;
+    --stage-line: #28313d;
+    --shadow: 0 1px 2px rgba(18,24,33,.05), 0 8px 24px rgba(18,24,33,.06);
+
+    --mono: ui-monospace, "SFMono-Regular", "SF Mono", "Cascadia Code", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:      #0e131a;
+      --surface:    #151b23;
+      --surface-2:  #1b232d;
+      --ink:        #e7edf3;
+      --ink-soft:   #b0bac5;
+      --muted:      #838e9b;
+      --line:       #27313d;
+      --accent:     #9a93ff;
+      --accent-2:   #b3adff;
+      --accent-soft:#20213a;
+      --ok:   #5fd08a;
+      --warn: #ffc061;
+      --crit: #ff7070;
+      --disc: #6ec8ff;
+      --stage:      #090c11;
+      --stage-2:    #10161e;
+      --stage-ink:  #eef2f6;
+      --stage-line: #232c37;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:#0e131a; --surface:#151b23; --surface-2:#1b232d;
+    --ink:#e7edf3; --ink-soft:#b0bac5; --muted:#838e9b; --line:#27313d;
+    --accent:#9a93ff; --accent-2:#b3adff; --accent-soft:#20213a;
+    --ok:#5fd08a; --warn:#ffc061; --crit:#ff7070; --disc:#6ec8ff;
+    --stage:#090c11; --stage-2:#10161e; --stage-ink:#eef2f6; --stage-line:#232c37;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"] {
+    --paper:#f2f5f8; --surface:#ffffff; --surface-2:#e8edf2;
+    --ink:#161d27; --ink-soft:#3f4a57; --muted:#6a7683; --line:#d7dee6;
+    --accent:#514ad0; --accent-2:#6f68e8; --accent-soft:#ecebfb;
+    --ok:#2f9557; --warn:#b1720c; --crit:#cc3a3a; --disc:#1f76b6;
+    --stage:#0c1016; --stage-2:#161d27; --stage-ink:#eef2f6; --stage-line:#28313d;
+    --shadow: 0 1px 2px rgba(18,24,33,.05), 0 8px 24px rgba(18,24,33,.06);
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { color: var(--accent-2); }
+
+  code, kbd, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  code {
+    font-size: .86em;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    padding: .08em .38em;
+    border-radius: 5px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  /* ---------- Header ---------- */
+  header.top {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+    padding: 12px clamp(16px, 4vw, 40px);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; }
+  .brand .dot {
+    width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center;
+    background: var(--stage); color: var(--stage-ink); font-size: 15px;
+    box-shadow: inset 0 0 0 1px var(--stage-line);
+  }
+  .brand b { font-family: var(--mono); font-size: 15px; letter-spacing: .02em; }
+  .top .spacer { flex: 1; }
+  .top .tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px;
+  }
+  @media (max-width: 640px){ .top .tag { display: none; } }
+  .theme-btn {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--surface); color: var(--ink-soft);
+    border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .demo-btn {
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: #fff; border: 1px solid var(--accent); border-radius: 8px;
+    padding: 6px 13px; display: inline-flex; align-items: center; gap: 7px;
+  }
+  .demo-btn:hover { background: var(--accent-2); border-color: var(--accent-2); }
+  .demo-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Shell ---------- */
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); }
+
+  .layout { display: grid; grid-template-columns: 1fr; gap: 40px; }
+  @media (min-width: 1000px) {
+    .layout { grid-template-columns: 220px minmax(0,1fr); gap: 56px; align-items: start; }
+  }
+
+  /* ---------- TOC ---------- */
+  nav.toc { }
+  @media (min-width: 1000px) {
+    nav.toc { position: sticky; top: 84px; align-self: start; }
+  }
+  nav.toc .toc-h {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 12px; padding-left: 12px;
+  }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; counter-reset: t; }
+  nav.toc li { margin: 0; }
+  nav.toc a {
+    display: block; text-decoration: none; color: var(--ink-soft);
+    font-size: 14px; padding: 6px 12px; border-left: 2px solid var(--line);
+    counter-increment: t;
+  }
+  nav.toc a::before {
+    content: counter(t, decimal-leading-zero) " ";
+    font-family: var(--mono); font-size: 11px; color: var(--muted); margin-right: 8px;
+  }
+  nav.toc a:hover { color: var(--ink); border-left-color: var(--accent-2); }
+  nav.toc a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+  @media (max-width: 999px) {
+    nav.toc { border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: var(--surface); }
+    nav.toc ol { columns: 2; column-gap: 8px; }
+    nav.toc a { border-left: none; padding: 5px 4px; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: clamp(36px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 18px;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 4.4rem); line-height: .98; letter-spacing: -.03em;
+    margin: 0 0 18px; font-weight: 800; text-wrap: balance;
+  }
+  .hero .lede {
+    font-size: clamp(1.05rem, 2.2vw, 1.3rem); color: var(--ink-soft);
+    max-width: 60ch; margin: 0; line-height: 1.5;
+  }
+
+  /* Stage replica */
+  .stage {
+    margin-top: 34px;
+    background:
+      radial-gradient(120% 140% at 50% -20%, rgba(255,255,255,.05), transparent 60%),
+      linear-gradient(180deg, var(--stage-2), var(--stage));
+    border: 1px solid var(--stage-line); border-radius: 18px;
+    padding: clamp(22px, 4vw, 40px);
+    color: var(--stage-ink);
+    box-shadow: var(--shadow);
+  }
+  .stage .st-label {
+    font-family: var(--mono); font-size: clamp(11px, 1.6vw, 13px); letter-spacing: .34em;
+    text-transform: uppercase; color: #8b95a3; text-align: center; margin: 0 0 6px;
+  }
+  .stage .st-time {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(3.4rem, 13vw, 7rem); font-weight: 300; letter-spacing: -.02em;
+    text-align: center; line-height: 1; margin: 0;
+    animation: pulse 3.4s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .stage .st-time { animation: none; } }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.9} }
+
+  .ladder { display: flex; gap: 10px; margin-top: 30px; overflow-x: auto; padding-bottom: 4px; }
+  .ladder .step {
+    flex: 1 0 118px; border: 1px solid var(--stage-line); border-radius: 12px;
+    background: rgba(255,255,255,.02); padding: 14px 14px 16px;
+  }
+  .ladder .k {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    color: #8b95a3; margin: 0 0 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .ladder .k i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; font-style: normal; }
+  .ladder .v {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.5rem; font-weight: 400;
+    letter-spacing: -.01em; margin: 0 0 2px;
+  }
+  .ladder .c { font-size: 12px; color: #93a0b0; line-height: 1.4; }
+  .st-white { color: #ffffff; }
+  .st-orange { color: #ffb84d; }
+  .st-red { color: #ff5555; }
+  .st-blue { color: #64c8ff; }
+  .arrow-note {
+    margin-top: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+    color: #7c8898; text-align: center;
+  }
+
+  /* ---------- Sections ---------- */
+  main section { padding: clamp(30px, 5vw, 52px) 0; border-top: 1px solid var(--line); }
+  main section:first-of-type { border-top: none; }
+  .sec-eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 10px; display: flex; align-items: center; gap: 10px;
+  }
+  .sec-eyebrow::before {
+    content: ""; width: 22px; height: 1px; background: var(--accent);
+  }
+  h2 { font-size: clamp(1.6rem, 3.4vw, 2.1rem); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 8px; font-weight: 750; text-wrap: balance; }
+  h3 { font-size: 1.18rem; letter-spacing: -.01em; margin: 30px 0 8px; font-weight: 700; }
+  p { max-width: 68ch; margin: 0 0 14px; color: var(--ink-soft); }
+  p strong, li strong { color: var(--ink); font-weight: 650; }
+  .lead { color: var(--ink); font-size: 1.06rem; }
+  ul, ol.list { max-width: 68ch; margin: 0 0 16px; padding-left: 0; list-style: none; }
+  ul li, ol.list li { position: relative; padding-left: 24px; margin: 8px 0; color: var(--ink-soft); }
+  ul li::before { content: ""; position: absolute; left: 4px; top: .72em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  ol.list { counter-reset: n; }
+  ol.list li { padding-left: 34px; }
+  ol.list li::before {
+    counter-increment: n; content: counter(n); position: absolute; left: 0; top: .15em;
+    font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent);
+    width: 22px; height: 22px; border: 1px solid var(--line); border-radius: 6px; display: grid; place-items: center;
+  }
+
+  /* Cards grid */
+  .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); margin: 6px 0 4px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px;
+    box-shadow: var(--shadow);
+  }
+  .card .ct { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  .card p { margin: 0; font-size: .95rem; }
+  .card .big { font-size: 1.1rem; color: var(--ink); font-weight: 650; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); margin: 6px 0 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  thead th {
+    text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; padding: 12px 14px; background: var(--surface-2); white-space: nowrap;
+  }
+  tbody td { padding: 11px 14px; border-top: 1px solid var(--line); color: var(--ink-soft); vertical-align: top; }
+  tbody tr:hover td { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
+  td .mono, td code { color: var(--ink); }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink); }
+
+  /* Status chips */
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .02em;
+    border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px 3px 8px; white-space: nowrap;
+    background: var(--surface);
+  }
+  .chip i { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+  .chip.ok { color: var(--ok); } .chip.warn { color: var(--warn); }
+  .chip.crit { color: var(--crit); } .chip.disc { color: var(--disc); }
+  .chip.neutral { color: var(--muted); }
+  .chip span { color: var(--ink); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 16px; }
+
+  /* Callout */
+  .callout {
+    display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start;
+    border: 1px solid var(--line); border-left: 3px solid var(--warn);
+    background: color-mix(in srgb, var(--warn) 8%, var(--surface));
+    border-radius: 10px; padding: 16px 18px; margin: 18px 0;
+  }
+  .callout .ic { font-size: 18px; line-height: 1.2; }
+  .callout p { margin: 0; max-width: none; color: var(--ink-soft); }
+  .callout strong { color: var(--ink); }
+
+  /* Flow */
+  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin: 12px 0 18px; }
+  .flow .node {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+    box-shadow: var(--shadow); min-width: 132px; flex: 1 0 auto;
+  }
+  .flow .node .n-k { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .flow .node .n-v { font-size: .92rem; color: var(--ink); font-weight: 600; }
+  .flow .sep { align-self: center; color: var(--muted); font-family: var(--mono); }
+
+  .kv { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+  .muted { color: var(--muted); }
+  .small { font-size: 13.5px; }
+
+  footer.foot {
+    border-top: 1px solid var(--line); margin-top: 20px;
+    padding: 28px 0 60px; color: var(--muted); font-size: 13px;
+    display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center;
+  }
+  footer.foot .mono { color: var(--ink-soft); }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+  /* ---------- Simulateur : réplique du minuteur réel (bas-gauche, redimensionnable) ---------- */
+  .sim {
+    position: fixed; left: 16px; bottom: 16px; z-index: 40;
+    width: 400px; height: 300px; min-width: 280px; min-height: 210px;
+    max-width: 94vw; max-height: 84vh;
+    overflow: hidden; background: #000; border: 1px solid var(--stage-line);
+    border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,.5);
+    resize: both;                        /* poignée ↘ */
+  }
+  .sim.collapsed {
+    display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 6px;
+    width: auto !important; height: auto !important; min-width: 0; min-height: 0;
+    resize: none; background: var(--stage-2); border-radius: 10px;
+  }
+  .sim.collapsed .sim-screen { display: none; }
+  .sim.collapsed .sim-collapse { position: static; }
+  .sim.collapsed::after { content: "Simulation"; font-family: var(--mono); font-size: 12px; letter-spacing: .05em; color: #cfd7e0; }
+
+  .sim-collapse {
+    position: absolute; top: 6px; left: 6px; z-index: 7;
+    width: 22px; height: 20px; font: inherit; font-size: 12px; line-height: 1; cursor: pointer;
+    background: rgba(20,26,34,.7); color: #cfd7e0; border: 1px solid var(--stage-line); border-radius: 6px;
+  }
+  .sim-collapse:hover { color: #fff; border-color: #7c8a99; }
+
+  .sim-max {
+    position: absolute; top: 6px; left: 32px; z-index: 7;
+    width: 22px; height: 20px; font: inherit; font-size: 12px; line-height: 1; cursor: pointer;
+    background: rgba(20,26,34,.7); color: #cfd7e0; border: 1px solid var(--stage-line); border-radius: 6px;
+  }
+  .sim-max:hover { color: #fff; border-color: #7c8a99; }
+  .sim.collapsed .sim-max { display: none; }
+
+  /* Maximisé (plein écran) */
+  .sim.max {
+    left: 0; right: 0; top: 0; bottom: 0;
+    width: auto !important; height: auto !important; max-width: none; max-height: none; min-width: 0; min-height: 0;
+    border-radius: 0; resize: none; z-index: 60;
+  }
+  .sim.max .sim-collapse { left: 12px; top: 12px; width: 30px; height: 26px; font-size: 15px; }
+  .sim.max .sim-max { left: 48px; top: 12px; width: 30px; height: 26px; font-size: 15px; }
+  .sim.max .sim-cpanel { width: 160px; padding: 6px; }
+  .sim.max .sim-cpanel button { width: 58px; height: 58px; margin: 4px; font-size: 12px; }
+  .sim.max .sim-cpanel .c-ico { font-size: 22px; }
+  .sim.max .sim-cpanel .c-delta { width: 62px; height: 62px; }
+  .sim.max .sim-gear { width: 46px; height: 46px; font-size: 22px; }
+  .sim.max .sim-optpanel { width: 224px; padding: 14px; }
+  .sim.max .op-title { font-size: 11px; margin-bottom: 12px; }
+  .sim.max .op-row, .sim.max .op-check, .sim.max .op-slider { margin-bottom: 9px; }
+  .sim.max .op-row label, .sim.max .op-check label { font-size: 12.5px; }
+  .sim.max .op-mmss { width: 68px; font-size: 13px; padding: 5px; }
+  .sim.max .op-check input { width: 18px; height: 18px; }
+  .sim.max .op-slider span { font-size: 11px; }
+  .sim.max .op-reset { font-size: 11px; padding: 8px; }
+
+  /* Écran = réplique de #timer-container */
+  .sim-screen {
+    position: relative; width: 100%; height: 100%; container-type: size; overflow: hidden;
+    background: linear-gradient(180deg, #0a0a0c, #141416 55%, #0a0a0c); color: #fff;
+  }
+  .sim-container {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start; padding: 5cqh 4cqw; text-align: center;
+  }
+  .sim-speaker {
+    font-family: var(--sans); font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,.95);
+    border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.04); letter-spacing: .12em;
+    margin: 0 0 2cqh; padding: 1.1cqh 3cqw; line-height: 1.1;
+    font-size: 13px; font-size: calc(4.4cqw * var(--scs, 1));
+  }
+  .sim-speaker.hidden { display: none; }
+  .sim-stack { flex: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .sim-ptitle {
+    font-family: var(--sans); font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,.4);
+    letter-spacing: .14em; margin: 0 0 1.4cqh; font-size: 10px; font-size: calc(3.2cqw * var(--scp,1));
+  }
+  .sim-ptime {
+    position: relative; margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-weight: 300; line-height: .9; letter-spacing: -.02em; color: #fff; transition: color .25s;
+    font-size: 3.4rem; font-size: calc(20cqw * var(--scp, 1));
+  }
+  .sim-ptime.orange { color: #ffb84d; text-shadow: 0 0 6cqw rgba(255,184,77,.45); }
+  .sim-ptime.red { color: #ff5555; text-shadow: 0 0 7cqw rgba(255,85,85,.5); }
+  .sim-ptime.blink { animation: simblink .5s steps(1,end) infinite; }
+  .sim-ptime.over::before { content: "+"; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); margin-right: .06em; }
+  @keyframes simblink { 50% { opacity: .3; } }
+  @media (prefers-reduced-motion: reduce){ .sim-ptime.blink { animation: none; opacity: 1; } }
+
+  .sim-sepbar { width: 22cqw; height: 2px; margin: 2.2cqh 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent); }
+  .sim-dtitle {
+    font-family: var(--sans); font-weight: 700; text-transform: uppercase; color: rgba(100,200,255,.8);
+    letter-spacing: .12em; margin: 0 0 1cqh; font-size: 9px; font-size: calc(2.6cqw * var(--scd,1));
+  }
+  .sim-dtime {
+    margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 300; line-height: 1;
+    color: rgba(100,200,255,.95); font-size: 2rem; font-size: calc(12cqw * var(--scd,1));
+  }
+  .sim-disc.hidden, .sim-sepbar.hidden { display: none; }
+
+  /* Contrôles ronds (réplique #tc-panel), bas-droite : discrets puis pleins au survol */
+  .sim-ctrls { position: absolute; right: 3cqw; bottom: 3cqw; z-index: 5; }
+  .sim-cpanel {
+    display: flex; flex-wrap: wrap; justify-content: center; width: 80px; padding: 4px;
+    border-radius: 9px; background: rgba(18,18,22,.55); border: 1px solid rgba(255,255,255,.1);
+    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); opacity: .18; transition: opacity .2s;
+  }
+  .sim-ctrls:hover .sim-cpanel, .sim-ctrls:focus-within .sim-cpanel { opacity: 1; }
+  .sim-cpanel button {
+    box-sizing: border-box; width: 28px; height: 28px; margin: 2px; padding: 0; border-radius: 50%;
+    background: #000; color: rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.9);
+    font-family: var(--mono); font-size: 7.5px; font-weight: 700; line-height: 1; cursor: pointer;
+    text-transform: uppercase; white-space: normal; word-break: break-word;
+  }
+  .sim-cpanel .c-ico { font-size: 12px; }
+  .sim-cpanel .c-delta { width: 30px; height: 30px; }
+  .sim-cpanel button:hover { background: rgba(255,255,255,.1); }
+  .sim-cpanel button:active { transform: translateY(1px); }
+  .sim-cpanel .c-neg { color: rgba(255,150,150,.95); border-color: rgba(255,150,150,.95); }
+  .sim-cpanel .c-pos { color: rgba(150,240,165,.95); border-color: rgba(150,240,165,.95); }
+  .sim-cpanel .c-mode { color: rgba(120,200,255,.95); border-color: rgba(120,200,255,.95); }
+  .sim-cpanel .c-reset { color: rgba(255,200,120,.95); border-color: rgba(255,200,120,.95); }
+  .sim-cpanel .c-pause.on { color: #7CFC8A; border-color: #7CFC8A; }
+
+  /* Options (réplique #timer-settings), haut-droite : engrenage + panneau */
+  .sim-opt { position: absolute; top: 3cqw; right: 3cqw; z-index: 6; }
+  .sim-gear {
+    display: block; margin-left: auto; width: 26px; height: 26px; padding: 0; border-radius: 50%;
+    background: rgba(18,18,22,.6); color: rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.1);
+    font-size: 13px; line-height: 1; cursor: pointer; opacity: .2; transition: opacity .2s;
+    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  }
+  .sim-opt:hover .sim-gear, .sim-opt.open .sim-gear { opacity: 1; }
+  .sim-gear:hover { background: rgba(255,255,255,.1); }
+  .sim-optpanel {
+    display: none; width: 160px; margin-top: 6px; margin-left: auto; max-height: 80cqh; overflow-y: auto;
+    padding: 9px; border-radius: 9px; background: rgba(18,18,22,.94); border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,.55); font-family: var(--mono);
+  }
+  .sim-opt.open .sim-optpanel { display: block; }
+  .op-title { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.5); text-align: center; margin-bottom: 8px; }
+  .op-row, .op-check { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 6px; }
+  .op-row label, .op-check label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: rgba(255,255,255,.85); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .op-row label::before, .op-check label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+  .lb-or::before { background:#ffb84d; } .lb-rd::before { background:#ff5555; }
+  .lb-bp::before, .lb-sn::before { background: rgba(255,225,130,.95); }
+  .lb-ot::before { background:#cc3333; } .lb-dc::before { background: rgba(100,200,255,.9); }
+  .lb-sp::before { background: rgba(100,220,120,.9); }
+  .op-mmss {
+    width: 52px; box-sizing: border-box; text-align: center; font-family: var(--mono); font-size: 11px; font-weight: 700;
+    color: #fff; background: #000; border: 1px solid rgba(255,255,255,.35); border-radius: 6px; padding: 3px 2px;
+  }
+  .op-mmss:focus { outline: none; border-color: rgba(120,200,255,.9); }
+  .op-check input { width: 15px; height: 15px; margin: 0; cursor: pointer; accent-color: #64c8ff; }
+  .op-sep { border-top: 1px solid rgba(255,255,255,.12); padding-top: 8px; margin-top: 2px; }
+  .op-slider { margin-bottom: 6px; }
+  .op-slider span { display: flex; justify-content: space-between; font-size: 9.5px; text-transform: uppercase; letter-spacing: .03em; color: rgba(255,255,255,.7); margin-bottom: 2px; }
+  .op-slider em { font-style: normal; color: rgba(120,200,255,.9); }
+  .op-slider input[type=range] { width: 100%; margin: 0; cursor: pointer; accent-color: #64c8ff; }
+  .op-reset {
+    display: block; width: 100%; margin-top: 6px; padding: 6px; font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em; color: rgba(255,200,120,.95); background: #000;
+    border: 1px solid rgba(255,200,120,.55); border-radius: 6px; cursor: pointer;
+  }
+  .op-reset:hover { background: rgba(255,200,120,.15); }
+
+  @media (max-width: 560px){ .sim { width: 300px; height: 240px; left: 10px; bottom: 10px; } }
+</style>
+
+<header class="top">
+  <span class="brand"><span class="dot">⏱</span><b>EasyPPT Timer</b></span>
+  <span class="spacer"></span>
+  <button class="demo-btn" id="demoBtn" type="button" title="Lancer la simulation en plein écran">▶ Démonstration</button>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Changer de thème">
+    <span id="themeIcon">◐</span><span id="themeLabel">Thème</span>
+  </button>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Minuteur de congrès · EasyPPT Timer</p>
+    <h1>Le minuteur de présentation automatique.</h1>
+    <p class="lede">Un affichage plein écran qui décompte le <strong>temps de présentation</strong> puis le <strong>temps de discussion</strong>, avec dépassement, alertes couleur, bip sonore et un panneau d'options réglable.</p>
+    
+    <div class="stage" role="img" aria-label="Réplique de l'afficheur du minuteur montrant 05:00">
+      <p class="st-label">Temps de présentation</p>
+      <p class="st-time">05:00</p>
+      <div class="ladder">
+        <div class="step"><p class="k st-white"><i></i>Décompte</p><p class="v st-white">04:12</p><p class="c">au-dessus du seuil orange</p></div>
+        <div class="step"><p class="k st-orange"><i></i>Orange</p><p class="v st-orange">03:40</p><p class="c">≤ seuil orange</p></div>
+        <div class="step"><p class="k st-red"><i></i>Rouge</p><p class="v st-red">00:22</p><p class="c">≤ seuil rouge, clignote</p></div>
+        <div class="step"><p class="k st-red"><i></i>Dépassement</p><p class="v st-red">+00:18</p><p class="c">compte vers le haut</p></div>
+        <div class="step"><p class="k st-blue"><i></i>Discussion</p><p class="v st-blue">03:00</p><p class="c">enchaîne après</p></div>
+      </div>
+      <p class="arrow-note">Décompte → Orange → Rouge → Dépassement → Discussion</p>
+    </div>
+  </section>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Sommaire">
+      <p class="toc-h">Sommaire</p>
+      <ol>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#donnees">Données d'entrée</a></li>
+        <li><a href="#cycle">Cycle de vie</a></li>
+        <li><a href="#couleurs">Alertes, bip, dépassement</a></li>
+        <li><a href="#layout">Mise en page</a></li>
+        <li><a href="#options">Panneau d'options</a></li>
+        <li><a href="#controles">Contrôles manuels</a></li>
+        <li><a href="#reset">Reset automatique</a></li>
+        <li><a href="#tailles">Tailles &amp; SCALE_BASE</a></li>
+        <li><a href="#storage">Persistance &amp; IE</a></li>
+      </ol>
+    </nav>
+
+    <main>
+      <section id="installation">
+        <p class="sec-eyebrow">Installation</p>
+        <h2>Deux fichiers seulement, un template de porte-nom</h2>
+        <p class="lead">Le rendu est piloté par le fonctionnement classique d'un Porte-Nom : les valeurs sont injectées côté <strong>RemoteInfoViewer</strong> et ensuite automatisées par le template.</p>
+        <div class="cards">
+          <div class="card">
+            <p class="ct">Fichier</p>
+            <p class="big mono">TIMER_PNO.html</p>
+            <p class="muted small" style="margin-top:6px">Structure HTML <strong>+ tout le JavaScript</strong> (inline dans un <code>&lt;script&gt;</code>).</p>
+          </div>
+          <div class="card">
+            <p class="ct">Fichier</p>
+            <p class="big mono">TIMER_PNO.css</p>
+            <p class="muted small" style="margin-top:6px">Styles, chargé via <code>?t={{tick}}</code> — rechargé à chaque mise à jour.</p>
+          </div>
+        </div>
+        <p style="margin-top:12px"><strong>Glissez ces deux fichiers</strong> dans le <strong>dossier de template</strong> du PC dédié pour le Porte-Nom, et sélectionnez <strong>Timer_PNO</strong> dans la configuration <strong>RemoteInfoViewer</strong> comme template par défaut.</p>
+      </section>
+
+      <section id="donnees">
+        <p class="sec-eyebrow">Entrées</p>
+        <h2>Données d'entrée</h2>
+        <p>Toutes issues de l'objet <code>Presentation</code> (et <code>Participants</code>) du template, càd <code>ractData.data.Presentation</code>.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Champ</th><th>Utilisation</th></tr></thead>
+            <tbody>
+              <tr><td><code>Presentation_Debut</code></td><td>Horaire de début (<span class="kv">HH:MM</span> ou <span class="kv">HH:MM:SS</span>).</td></tr>
+              <tr><td><code>Presentation_Fin</code></td><td><strong>Durée de présentation = fin − début</strong> (seulement si fin &gt; début).</td></tr>
+              <tr><td><code>Presentation_Discussion</code></td><td>Durée de discussion (même format, via <code>parseTime</code>).</td></tr>
+              <tr><td><code>Presentation_CurrentSlide</code><br><code>Presentation_TotalSlides</code></td><td>Affichage <span class="kv">Slides x/y</span>. <strong>Liaison template directe, aucun JS.</strong> Visible seulement si les deux sont renseignés.</td></tr>
+              <tr><td><code>Participants_Prenom</code><br><code>Participants_Nom</code></td><td>Nom de l'orateur (liaison template directe).</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      <section id="cycle">
+        <p class="sec-eyebrow">Fonctionnement</p>
+        <h2>Cycle de vie du minuteur</h2>
+
+        <h3><code>updateTimerData()</code> — (ré)initialisation</h3>
+        <p>Appelé au démarrage, au <strong>Reset</strong> manuel, et à chaque <strong>changement de données</strong> détecté. Il arrête le timer et le clignotement, recalcule les durées, remet l'état à zéro (pause, dépassement, discussion), réaffiche et relance <code>setInterval(updateTimer, 1000)</code>.</p>
+
+        <h3><code>updateTimer()</code> — chaque seconde</h3>
+        <p>Quand une durée de présentation existe, le minuteur traverse ces états :</p>
+        <ol class="list">
+          <li><strong>Décompte</strong> (<span class="kv">currentTime &gt; 0</span>) : décrémente ; <strong>bip</strong> à l'instant configuré ; couleur selon les seuils.</li>
+          <li><strong>Dépassement</strong> (<span class="kv">currentTime = 0</span>) : compte <strong>vers le haut</strong> <span class="kv">+00:01, +00:02…</span> jusqu'au maximum « Rallonge », en rouge clignotant, avec un <span class="kv">+</span> à gauche.</li>
+          <li><strong>Dépassement plein</strong> : se <strong>bloque</strong> au maximum (clignotement maintenu), puis <strong>enchaîne sur la discussion</strong> si elle est configurée.</li>
+          <li><strong>Discussion active</strong> : décompte du temps de discussion.</li>
+        </ol>
+        <p class="small muted">Sans durée valide (fin ≤ début, ou champs vides) : mode <strong style="color:var(--ink)">chronomètre croissant</strong> (00:01, 00:02…), sans seuils ni dépassement.</p>
+      </section>
+
+      <section id="couleurs">
+        <p class="sec-eyebrow">Signalétique</p>
+        <h2>Alertes, bip &amp; dépassement</h2>
+
+        <h3>Couleurs du décompte</h3>
+        <div class="chips">
+          <span class="chip neutral"><i></i><span>Blanc</span> &nbsp;&gt; seuil orange</span>
+          <span class="chip warn"><i></i><span>Orange</span> &nbsp;≤ seuil orange</span>
+          <span class="chip crit"><i></i><span>Rouge clignotant</span> &nbsp;≤ seuil rouge &amp; dépassement</span>
+        </div>
+        <p class="small muted">Le clignotement alterne rouge / rouge sombre (variation d'opacité).</p>
+
+        <h3>Bip sonore</h3>
+        <ul>
+          <li>Joué <strong>une fois</strong> quand le décompte atteint <strong>exactement</strong> l'instant « Bip ».</li>
+          <li>Fichier <code>img/beep.mp3</code> via <code>HTMLAudioElement</code> (navigateurs récents + IE11) ; repli <code>&lt;bgsound&gt;</code> (MP3) pour très vieux IE.</li>
+          <li>Activé / coupé par la case <strong>« Son »</strong>.</li>
+        </ul>
+
+        <h3>Dépassement (« overtime »)</h3>
+        <ul>
+          <li>Affiché <span class="kv">+MM:SS</span> ; le <span class="kv">+</span> est un pseudo-élément en position absolue → il <strong>ne décale pas</strong> les chiffres (qui restent centrés comme le timer normal).</li>
+          <li>Monte jusqu'à <strong>overtimeMax</strong> (réglable « Rallonge »), puis blocage + passage discussion.</li>
+        </ul>
+      </section>
+
+      <section id="layout">
+        <p class="sec-eyebrow">Structure</p>
+        <h2>Mise en page</h2>
+        <p>L'orateur est calé en haut ; le <strong>bloc présentation + discussion</strong> est centré ensemble dans <code>#timer-stack</code> : la discussion <strong>suit</strong> la présentation (elle n'est pas collée en bas) et l'ensemble se <strong>recentre dynamiquement</strong> quand on change les tailles.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Élément</th><th>Rôle</th></tr></thead>
+            <tbody>
+              <tr><td><code>#speakerName</code></td><td>Nom de l'orateur, en haut.</td></tr>
+              <tr><td><code>#timer-stack</code></td><td><span class="kv">flex:1</span> — centre verticalement le groupe ci-dessous.</td></tr>
+              <tr><td><code>#presentation-section</code></td><td>Titre « Temps de présentation » + timer.</td></tr>
+              <tr><td><code>#slides</code></td><td>Compteur de slides (optionnel).</td></tr>
+              <tr><td><code>#discussion-section</code></td><td>Titre « Temps de discussion » + timer (léger espacement au-dessus).</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul>
+          <li><strong>Mode discussion</strong> (classe <code>discussion-mode</code>) : présentation réduite, discussion agrandie (point focal).</li>
+          <li><strong>Responsive</strong> : <code>@media (min-width: 1920px)</code> agrandit les tailles.</li>
+        </ul>
+      </section>
+
+      <section id="options">
+        <p class="sec-eyebrow">Réglages</p>
+        <h2>Panneau d'options <span class="muted" style="font-weight:400">(haut-droite ⚙)</span></h2>
+        <p>Engrenage discret (plein au survol). <strong>Clic sur l'engrenage</strong> = ouvrir/fermer ; <strong>clic à l'extérieur</strong> = fermer. Les réglages sont <strong>sauvegardés à chaque modification</strong>.</p>
+
+        <h3>Seuils <span class="muted" style="font-weight:400;font-size:.85em">— saisie MM:SS</span></h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Réglage</th><th>Défaut</th><th>Effet</th></tr></thead>
+            <tbody>
+              <tr><td>Orange</td><td class="num">05:00</td><td>Passage en orange sous ce temps.</td></tr>
+              <tr><td>Rouge</td><td class="num">00:30</td><td>Passage en rouge clignotant sous ce temps.</td></tr>
+              <tr><td>Bip</td><td class="num">00:30</td><td>Instant précis du bip.</td></tr>
+              <tr><td>Rallonge</td><td class="num">01:00</td><td>Durée maximale du dépassement avant discussion.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <span class="ic">⚠︎</span>
+          <p><strong>Contrainte de cohérence : Rouge ≤ Orange.</strong> Une saisie qui ne rempli pas cette condition est refusée (ancienne valeur rétablie + message d'avertissement).</p>
+        </div>
+
+        <h3>Cases à cocher</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Case</th><th>Défaut</th><th>Effet</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip warn"><i></i><span>Son</span></span></td><td>Coupé</td><td>Active / coupe le bip.</td></tr>
+              <tr><td><span class="chip disc"><i></i><span>Discussion</span></span></td><td>Affiché</td><td>Affiche le bloc discussion — <strong>uniquement si un temps est renseigné</strong> (pas de placeholder). Décoché = masqué même si renseigné.</td></tr>
+              <tr><td><span class="chip ok"><i></i><span>Orateur</span></span></td><td>Affiché</td><td>Affiche / masque le nom de l'orateur.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Tailles <span class="muted" style="font-weight:400;font-size:.85em">— sliders 50 %–150 %, pas de 5 %</span></h3>
+        <p><strong>Présentation</strong>, <strong>Discussion</strong>, <strong>Orateur</strong> : agrandit/réduit via la <code>font-size</code> (le texte grandit dans son conteneur centré → centrage préservé, recentrage vertical dynamique, pas de chevauchement). Le bouton <strong>« Valeurs par défaut »</strong> réinitialise tous les réglages.</p>
+      </section>
+
+      <section id="controles">
+        <p class="sec-eyebrow">Pilotage</p>
+        <h2>Contrôles manuels <span class="muted" style="font-weight:400">(bas-droite)</span></h2>
+        <p>Panneau discret (plein au survol) de boutons ronds.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Bouton</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td class="num">⏸ / ▶</td><td>Pause / Reprise.</td></tr>
+              <tr><td class="num">⟲</td><td><strong>Reset</strong> — relance <code>updateTimerData</code> (durées initiales).</td></tr>
+              <tr><td class="num">−10 s / +10 s</td><td>Ajuste de ±10 s le timer actif.</td></tr>
+              <tr><td class="num">−1 min / +1 min</td><td>Ajuste de ±1 min le timer actif.</td></tr>
+              <tr><td>Mode</td><td>Bascule présentation ↔ discussion.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Comportement des ± selon l'état</h3>
+        <ul>
+          <li><strong>Présentation</strong> : ajuste le décompte ; s'il passe sous 0 (durée existante), bascule en dépassement avec le reste.</li>
+          <li><strong>Dépassement</strong> : agit sur le <span class="kv">+MM:SS</span> — ex. <span class="kv">+00:30</span> <span class="muted">−10 s</span> → <span class="kv">+00:20</span> ; et s'il repasse sous 0, retour en présentation — ex. <span class="kv">+00:05</span> <span class="muted">−10 s</span> → <span class="kv">00:05</span>.</li>
+          <li><strong>Discussion</strong> : ajuste le temps de discussion.</li>
+        </ul>
+      </section>
+
+      <section id="reset">
+        <p class="sec-eyebrow">Automatisme</p>
+        <h2>Réinitialisation automatique</h2>
+        <p><code>checkDataChanges()</code> s'exécute <strong>toutes les secondes</strong> : il calcule une empreinte JSON de trois champs et relance un reset complet dès qu'elle change.</p>
+        <div class="flow">
+          <div class="node"><div class="n-k">Lit</div><div class="n-v">Debut · Fin · Discussion</div></div>
+          <div class="sep">→</div>
+          <div class="node"><div class="n-k">Compare</div><div class="n-v">empreinte JSON</div></div>
+          <div class="sep">→</div>
+          <div class="node"><div class="n-k">Si différent</div><div class="n-v">updateTimerData()</div></div>
+        </div>
+        <ul>
+          <li>Le critère est <strong>la valeur de ces 3 champs</strong>, pas un identifiant de présentation. Deux présentations aux <strong>mêmes</strong> horaires <strong>ne resettent pas</strong>.</li>
+          <li>Le <strong>nom de l'orateur</strong> et les <strong>slides</strong> ne font <strong>pas</strong> partie du critère.</li>
+          <li>Latence : jusqu'à ~1 s.</li>
+        </ul>
+      </section>
+
+      <section id="tailles">
+        <p class="sec-eyebrow">Interne</p>
+        <h2>Système de tailles &amp; SCALE_BASE</h2>
+        <p>Les tailles réglables s'appuient sur des <strong>constantes</strong> JS (<code>SCALE_BASE</code>) plutôt que <code>getComputedStyle</code> : celui-ci renvoyait la taille par défaut (~16 px) quand le CSS n'était pas encore appliqué → chiffres minuscules qui se <strong>superposaient</strong> (à cause du <code>letter-spacing</code> négatif).</p>
+        <p class="small muted">Format : <span class="kv">[normal, ≥1920px, mode discussion, discussion ≥1920px]</span></p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Élément</th><th>Constantes JS</th><th>Doit correspondre au CSS</th></tr></thead>
+            <tbody>
+              <tr><td><code>presentation</code></td><td class="num">190, 359, 95, 150</td><td class="small"><code>#presentation-timer</code></td></tr>
+              <tr><td><code>discussion</code></td><td class="num">135, 111, 250, 320</td><td class="small"><code>#discussion-timer</code></td></tr>
+              <tr><td><code>speaker</code></td><td class="num">54, 54, 54, 54</td><td class="small"><code>#speakerName</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <span class="ic">⚠︎</span>
+          <p><strong>Si tu modifies une <code>font-size</code> de timer dans le CSS, reporte la valeur dans <code>SCALE_BASE</code></strong> — sinon les tailles ≠ 100 % seront fausses. Le facteur est recalculé au changement de mode et au <code>resize</code> (seuil 1920 px). À 100 %, aucune surcharge : le CSS reprend la main.</p>
+        </div>
+      </section>
+
+      <section id="storage">
+        <p class="sec-eyebrow">Persistance &amp; support</p>
+        <h2>Clés localStorage</h2>
+        <p>Chargées <strong>une fois par session de page</strong> (garde <code>thresholdsLoaded</code>). Si <code>localStorage</code> est indisponible, les défauts s'appliquent.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Clé</th><th>Réglage</th><th>Format</th><th>Défaut</th></tr></thead>
+            <tbody>
+              <tr><td><code>tcOrangeThreshold</code></td><td>Seuil orange</td><td>secondes</td><td class="num">300</td></tr>
+              <tr><td><code>tcRedThreshold</code></td><td>Seuil rouge</td><td>secondes</td><td class="num">30</td></tr>
+              <tr><td><code>tcBeepTime</code></td><td>Instant du bip</td><td>secondes</td><td class="num">30</td></tr>
+              <tr><td><code>tcOvertimeMax</code></td><td>Dépassement max</td><td>secondes</td><td class="num">60</td></tr>
+              <tr><td><code>tcShowDiscussion</code></td><td>Afficher discussion</td><td>'1' / '0'</td><td class="num">'1'</td></tr>
+              <tr><td><code>tcShowSpeaker</code></td><td>Afficher orateur</td><td>'1' / '0'</td><td class="num">'1'</td></tr>
+              <tr><td><code>tcSoundOn</code></td><td>Son actif</td><td>'1' / '0'</td><td>coupé</td></tr>
+              <tr><td><code>tcScalePresentation</code></td><td>Taille présentation</td><td>% (50–150)</td><td class="num">100</td></tr>
+              <tr><td><code>tcScaleDiscussion</code></td><td>Taille discussion</td><td>% (50–150)</td><td class="num">100</td></tr>
+              <tr><td><code>tcScaleSpeaker</code></td><td>Taille orateur</td><td>% (50–150)</td><td class="num">100</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Compatibilité IE / Trident</h3>
+        <ul>
+          <li><code>addEventListener</code> et <code>classList.add/remove</code> (mono-argument) ; <strong>pas</strong> de <code>closest</code>, ni <code>classList.toggle(x, bool)</code>, ni variables CSS.</li>
+          <li>Audio : <code>HTMLAudioElement</code> + repli <code>&lt;bgsound&gt;</code> (MP3).</li>
+          <li><code>matchMedia</code> avec repli <code>clientWidth</code> ; <code>getComputedStyle</code> évité pour les tailles.</li>
+        </ul>
+      </section>
+
+      <footer class="foot">
+        <span>Réf. interne · <span class="mono">TIMER_PNO.html</span> + <span class="mono">TIMER_PNO.css</span></span>
+        <span class="spacer" style="flex:1"></span>
+        <span>Bandeau congrès retiré · layout plein écran</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<aside class="sim" id="sim" aria-label="Simulateur du minuteur (réplique)">
+  <button class="sim-collapse" id="simToggle" type="button" aria-label="Réduire ou agrandir" aria-expanded="true">–</button>
+  <button class="sim-max" id="simMax" type="button" aria-label="Maximiser" title="Maximiser / restaurer">⤢</button>
+  <div class="sim-screen">
+    <!-- Options : réplique du panneau haut-droite -->
+    <div class="sim-opt" id="simOpt">
+      <button class="sim-gear" id="simGear" type="button" title="Options">⚙</button>
+      <div class="sim-optpanel">
+        <div class="op-title">Réglages</div>
+        <div class="op-row"><label class="lb-or">Orange</label><input class="op-mmss" id="opOrange" value="00:15" maxlength="6"></div>
+        <div class="op-row"><label class="lb-rd">Rouge</label><input class="op-mmss" id="opRed" value="00:08" maxlength="6"></div>
+        <div class="op-row"><label class="lb-bp">Bip</label><input class="op-mmss" id="opBeep" value="00:08" maxlength="6"></div>
+        <div class="op-row"><label class="lb-ot">Rallonge</label><input class="op-mmss" id="opOt" value="00:05" maxlength="6"></div>
+        <div class="op-check op-sep"><label class="lb-sn">Son</label><input type="checkbox" id="opSound"></div>
+        <div class="op-check"><label class="lb-dc">Discussion</label><input type="checkbox" id="opDisc" checked></div>
+        <div class="op-check"><label class="lb-sp">Orateur</label><input type="checkbox" id="opSpk" checked></div>
+        <div class="op-slider"><span>Présentation <em id="valP">100 %</em></span><input type="range" id="opScP" min="50" max="150" step="5" value="100"></div>
+        <div class="op-slider"><span>Discussion <em id="valD">100 %</em></span><input type="range" id="opScD" min="50" max="150" step="5" value="100"></div>
+        <div class="op-slider"><span>Orateur <em id="valS">100 %</em></span><input type="range" id="opScS" min="50" max="150" step="5" value="100"></div>
+        <button class="op-reset" id="opReset" type="button">Valeurs par défaut</button>
+      </div>
+    </div>
+
+    <!-- Écran : réplique de #timer-container -->
+    <div class="sim-container" id="simContainer">
+      <div class="sim-speaker" id="simSpeaker">Juste Leblanc</div>
+      <div class="sim-stack">
+        <div class="sim-pres">
+          <div class="sim-ptitle">Temps de présentation</div>
+          <div class="sim-ptime" id="simPres">00:25</div>
+        </div>
+        <div class="sim-sepbar" id="simSep"></div>
+        <div class="sim-disc" id="simDiscBlock">
+          <div class="sim-dtitle">Temps de discussion</div>
+          <div class="sim-dtime" id="simDisc">00:15</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contrôles ronds : réplique #tc-panel, bas-droite -->
+    <div class="sim-ctrls">
+      <div class="sim-cpanel">
+        <button type="button" data-act="pause" class="c-ico c-pause on">▶</button>
+        <button type="button" data-act="reset" class="c-ico c-reset">⟲</button>
+        <button type="button" data-act="-10" class="c-delta c-neg">−10 s</button>
+        <button type="button" data-act="+10" class="c-delta c-pos">+10 s</button>
+        <button type="button" data-act="-60" class="c-delta c-neg">−1 min</button>
+        <button type="button" data-act="+60" class="c-delta c-pos">+1 min</button>
+        <button type="button" data-act="mode" class="c-mode">Mode</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script>
+  /* ---- Simulateur : réplique fonctionnelle du minuteur ---- */
+  (function () {
+    var $ = function (id) { return document.getElementById(id); };
+    var sim = $('sim'); if (!sim) return;
+    var pres = $('simPres'), disc = $('simDisc'), spk = $('simSpeaker'),
+        discBlock = $('simDiscBlock'), sep = $('simSep'), cont = $('simContainer'), opt = $('simOpt');
+    var pauseBtn = null, actx = null;
+
+    var PRES0 = 25, DISC0 = 15;                 // durées de démo (secondes)
+    var S = { phase: 'presentation', cur: PRES0, ot: 0, dt: DISC0, paused: true };
+
+    function toSec(v, d) {
+      v = ('' + (v == null ? '' : v)).replace(/\s/g, ''); if (!v) return d;
+      var p = v.split(':'), m, s;
+      if (p.length === 2) { m = parseInt(p[0], 10); s = parseInt(p[1], 10); }
+      else { m = 0; s = parseInt(p[0], 10); }
+      if (isNaN(m) || isNaN(s)) return d; return Math.max(0, m * 60 + s);
+    }
+    var orange = function () { return toSec($('opOrange').value, 15); };
+    var red    = function () { return toSec($('opRed').value, 8); };
+    var beepAt = function () { return toSec($('opBeep').value, 8); };
+    var otMax  = function () { return toSec($('opOt').value, 5); };
+    var discOn = function () { return $('opDisc').checked; };
+    function fmt(s) { var m = Math.floor(s / 60), x = s % 60; return (m < 10 ? '0' : '') + m + ':' + (x < 10 ? '0' : '') + x; }
+
+    function beep() {
+      if (!$('opSound').checked) return;
+      try {
+        actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+        if (actx.resume) actx.resume();
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = 'sine'; o.frequency.value = 880; g.gain.value = .14;
+        o.connect(g); g.connect(actx.destination);
+        o.start(); o.stop(actx.currentTime + .18);
+      } catch (e) {}
+    }
+
+    function render() {
+      if (S.phase === 'overtime') { pres.textContent = fmt(S.ot); pres.className = 'sim-ptime red blink over'; }
+      else {
+        pres.textContent = fmt(S.cur);
+        pres.className = (S.cur <= red()) ? 'sim-ptime red blink'
+                       : (S.cur <= orange()) ? 'sim-ptime orange' : 'sim-ptime';
+      }
+      disc.textContent = fmt(S.dt);
+    }
+
+    function step() {
+      if (S.paused) return;
+      if (S.phase === 'discussion') { if (S.dt > 0) S.dt--; render(); return; }
+      if (S.cur > 0) {
+        S.cur--;
+        if (S.cur === beepAt()) beep();
+        S.phase = 'presentation'; render(); return;
+      }
+      S.phase = 'overtime';                          // décompte à 0 → dépassement
+      var mx = otMax();
+      if (S.ot < mx) S.ot++;
+      render();
+      if (S.ot >= mx && discOn() && S.dt > 0) S.phase = 'discussion';   // enchaîne sur la discussion
+    }
+
+    function setPaused(p) {
+      S.paused = p;
+      if (pauseBtn) { pauseBtn.textContent = p ? '▶' : '⏸'; pauseBtn.className = 'c-ico c-pause' + (p ? ' on' : ''); }
+    }
+    function reset() { S.phase = 'presentation'; S.cur = PRES0; S.dt = DISC0; S.ot = 0; setPaused(true); render(); }
+
+    function adjust(d) {
+      if (S.phase === 'discussion') { S.dt = Math.max(0, S.dt + d); }
+      else if (S.phase === 'overtime') {
+        var no = S.ot + d;
+        if (no < 0) { S.phase = 'presentation'; S.ot = 0; S.cur = -no; }   // franchit 0 → présentation
+        else S.ot = Math.min(otMax(), no);
+      } else {
+        var nc = S.cur + d;
+        if (nc < 0) { S.phase = 'overtime'; S.cur = 0; S.ot = Math.min(otMax(), -nc); }
+        else S.cur = nc;
+      }
+      render();
+    }
+    function mode() {
+      if (S.phase === 'discussion') S.phase = 'presentation';
+      else if (discOn()) S.phase = 'discussion';
+      render();
+    }
+
+    // Contrôles ronds (délégation, comme le vrai #tc-panel)
+    var cpanel = sim.querySelector('.sim-cpanel');
+    cpanel.addEventListener('click', function (e) {
+      var b = e.target; while (b && b.tagName !== 'BUTTON') b = b.parentNode;
+      if (!b) return;
+      var a = b.getAttribute('data-act');
+      if (a === 'pause') { if (actx && actx.resume) actx.resume(); setPaused(!S.paused); }
+      else if (a === 'reset') reset();
+      else if (a === 'mode') mode();
+      else adjust(parseInt(a, 10));
+    });
+    pauseBtn = cpanel.querySelector('.c-pause');
+
+    // Panneau d'options : ouverture/fermeture + clic extérieur
+    $('simGear').onclick = function (e) { e.stopPropagation(); opt.classList.toggle('open'); };
+    document.addEventListener('click', function (e) {
+      if (!opt.classList.contains('open')) return;
+      var t = e.target; while (t) { if (t === opt) return; t = t.parentNode; }
+      opt.classList.remove('open');
+    });
+
+    // Seuils MM:SS : normalisation à la validation + recolore
+    ['opOrange', 'opRed', 'opBeep', 'opOt'].forEach(function (id) {
+      $(id).onchange = function () { this.value = fmt(toSec(this.value, 0)); render(); };
+    });
+
+    // Cases à cocher
+    function applyDisc() {
+      var on = discOn();
+      sep.classList.toggle('hidden', !on); discBlock.classList.toggle('hidden', !on);
+      if (!on && S.phase === 'discussion') { S.phase = 'presentation'; render(); }
+    }
+    function applySpk() { spk.classList.toggle('hidden', !$('opSpk').checked); }
+    $('opDisc').onchange = applyDisc;
+    $('opSpk').onchange = applySpk;
+    $('opSound').onchange = function () { if (this.checked && actx && actx.resume) actx.resume(); };
+
+    // Sliders de taille (font-size via variable CSS + unités container query)
+    function scale(id, prop, valId) { var v = $(id).value; cont.style.setProperty(prop, v / 100); if ($(valId)) $(valId).textContent = v + ' %'; }
+    $('opScP').oninput = function () { scale('opScP', '--scp', 'valP'); };
+    $('opScD').oninput = function () { scale('opScD', '--scd', 'valD'); };
+    $('opScS').oninput = function () { scale('opScS', '--scs', 'valS'); };
+
+    // Valeurs par défaut (valeurs de démo, courtes)
+    $('opReset').onclick = function () {
+      $('opOrange').value = '00:15'; $('opRed').value = '00:08'; $('opBeep').value = '00:08'; $('opOt').value = '00:05';
+      $('opSound').checked = false; $('opDisc').checked = true; $('opSpk').checked = true;
+      $('opScP').value = 100; $('opScD').value = 100; $('opScS').value = 100;
+      scale('opScP', '--scp', 'valP'); scale('opScD', '--scd', 'valD'); scale('opScS', '--scs', 'valS');
+      applyDisc(); applySpk(); render();
+    };
+
+    // Maximiser / restaurer (plein écran)
+    var maxBtn = $('simMax');
+    function setMax(on) {
+      if (on) sim.classList.remove('collapsed');
+      sim.classList.toggle('max', on);
+      maxBtn.textContent = on ? '⤡' : '⤢';
+      maxBtn.setAttribute('aria-label', on ? 'Restaurer' : 'Maximiser');
+    }
+    maxBtn.onclick = function () { setMax(!sim.classList.contains('max')); };
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'Escape' || e.keyCode === 27) && sim.classList.contains('max')) setMax(false);
+    });
+
+    // Réduire / agrandir
+    $('simToggle').onclick = function () {
+      var c = sim.classList.toggle('collapsed');
+      if (c) setMax(false);
+      this.textContent = c ? '+' : '–'; this.setAttribute('aria-expanded', c ? 'false' : 'true');
+    };
+
+    // Appelé par le bouton "Démonstration" en tête de doc : déplié, plein écran, en marche
+    window.simLaunchDemo = function () {
+      sim.classList.remove('collapsed');
+      $('simToggle').textContent = '–'; $('simToggle').setAttribute('aria-expanded', 'true');
+      setMax(true);
+      try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); if (actx.resume) actx.resume(); } catch (e) {}
+      reset();
+      setPaused(false);
+    };
+
+    // Init
+    applyDisc(); applySpk();
+    scale('opScP', '--scp', 'valP'); scale('opScD', '--scd', 'valD'); scale('opScS', '--scs', 'valS');
+    setPaused(true); render();
+    setInterval(step, 1000);
+    try {
+      if (window.matchMedia && window.matchMedia('(max-width: 640px)').matches) {
+        sim.classList.add('collapsed'); $('simToggle').textContent = '+'; $('simToggle').setAttribute('aria-expanded', 'false');
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<script>
+  (function () {
+    // Thème : bascule light/dark, en partant de la préférence système
+    var root = document.documentElement;
+    var btn = document.getElementById('themeBtn');
+    var icon = document.getElementById('themeIcon');
+    var label = document.getElementById('themeLabel');
+    function current() {
+      var t = root.getAttribute('data-theme');
+      if (t) return t;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    function sync() {
+      var d = current() === 'dark';
+      icon.textContent = d ? '☾' : '☀';
+      label.textContent = d ? 'Sombre' : 'Clair';
+    }
+    btn.addEventListener('click', function () {
+      root.setAttribute('data-theme', current() === 'dark' ? 'light' : 'dark');
+      sync();
+    });
+    if (window.matchMedia) {
+      try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', sync); } catch (e) {}
+    }
+    sync();
+
+    // Bouton "Démonstration" en tête : ouvre la simulation en plein écran
+    var demoBtn = document.getElementById('demoBtn');
+    if (demoBtn) demoBtn.addEventListener('click', function () { if (window.simLaunchDemo) window.simLaunchDemo(); });
+
+    // Scrollspy : surligne l'entrée du sommaire de la section visible
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+    var map = {};
+    links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+    var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            links.forEach(function (l) { l.classList.remove('active'); });
+            var a = map[en.target.id];
+            if (a) a.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+      sections.forEach(function (s) { io.observe(s); });
+    }
+  })();
+</script>
+
+</body>
+</html>
